@@ -1,6 +1,6 @@
 {
   "name": "@as-integrations/hapi",
-  "private": true,
+  "private": false,
   "description": "An Apollo Server integration for use with Hapi",
   "version": "1.0.0",
   "author": {
