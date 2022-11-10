@@ -1,7 +1,7 @@
 {
   "name": "@as-integrations/hapi",
   "private": true,
-  "description": "A template for TypeScript projects with pre-configured tooling",
+  "description": "An Apollo Server integration for use with Hapi",
   "version": "1.0.0",
   "author": {
     "name": "David Castro",
