@@ -85,6 +85,33 @@ await hapi.register({
 });
 ```
 
+## **Route Configuration**
+
+Additional configuration for Hapi routes that are created by this module can be passed via 
+getRoute (get / options routes) or postRoute (post route). Both support options, rules, and vhost
+configuration.
+
+For example, to add a max upload size to the post route:
+
+```typescript
+await hapi.register({
+  plugin: hapiPlugin,
+  options: {
+    context: async ({ request }) => ({
+      token: request.headers.token
+    }),
+    apolloServer,
+    postRoute: {
+      options: {
+        payload: {
+          maxBytes: 1024
+        }
+      }
+    }
+  }
+});
+```
+
 ## **Contributors**
 
 - David Castro ([arimus](https://github.com/arimus))

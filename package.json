@@ -2,7 +2,7 @@
   "name": "@as-integrations/hapi",
   "private": false,
   "description": "An Apollo Server integration for use with Hapi",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "author": {
     "name": "David Castro",
     "email": "arimus@gmail.com"

@@ -1,21 +1,26 @@
-import type {Request, ResponseToolkit, Server, Lifecycle} from '@hapi/hapi';
-import type {
-  ApolloServer,
-  BaseContext, ContextFunction,
-  HTTPGraphQLRequest,
-} from '@apollo/server';
+import type {Lifecycle, ReqRef, Request, ResponseToolkit, RouteOptions, Server, Util} from '@hapi/hapi';
+import type {ApolloServer, BaseContext, ContextFunction, HTTPGraphQLRequest,} from '@apollo/server';
 import type {WithRequired} from '@apollo/utils.withrequired';
-import type {Util} from '@hapi/hapi';
 
 export interface HapiContextFunctionArgument {
   request: Request;
   h: ResponseToolkit;
 }
 
-interface HapiApolloPluginOptions<TContext extends BaseContext> {
+export interface HapiApolloPluginOptions<TContext extends BaseContext> {
   apolloServer: ApolloServer;
   context?: ContextFunction<[HapiContextFunctionArgument], TContext>;
   path?: string;
+  getRoute?: {
+    options?: RouteOptions<ReqRef> | ((server: Server) => RouteOptions<ReqRef>) | undefined;
+    rules?: ReqRef['Rules'] | undefined;
+    vhost?: string | string[] | undefined;
+  };
+  postRoute?: {
+    options?: RouteOptions<ReqRef> | ((server: Server) => RouteOptions<ReqRef>) | undefined;
+    rules?: ReqRef['Rules'] | undefined;
+    vhost?: string | string[] | undefined;
+  };
 }
 
 function hapiMiddleware(
@@ -119,19 +124,28 @@ const hapiPlugin = {
 
     // configure the route that apollo server will be mapped to
     server.route({
-      path: opts.path || '/',
-      method: ['GET', 'POST', 'OPTIONS'],
-      handler: hapiMiddleware(apolloServer, {
-        context: opts.context,
-        path: opts.path
-      } as HapiApolloPluginOptions<any>)
+      ...opts.getRoute,
+      ...{
+        path: opts.path || '/',
+        method: ['GET', 'OPTIONS'],
+        handler: hapiMiddleware(apolloServer, {
+          context: opts.context,
+          path: opts.path
+        } as HapiApolloPluginOptions<any>)
+      }
     });
 
-    // TEST ROUTE FOR DEBUGGING
-    // server.ext('onRequest', async (_request: Request, _h: ResponseToolkit, _err?: Error) => {
-    //   console.log('method', _request.method, 'path', _request.path, 'err', _err);
-    //   return _h.continue;
-    // });
+    server.route({
+      ...opts.postRoute,
+      ...{
+        path: opts.path || '/',
+        method: 'POST',
+        handler: hapiMiddleware(apolloServer, {
+          context: opts.context,
+          path: opts.path
+        } as HapiApolloPluginOptions<any>)
+      }
+    });
   }
 }
 
