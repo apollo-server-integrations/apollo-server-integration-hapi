@@ -57,7 +57,7 @@
     "@hapi/hapi": "^20.2.2"
   },
   "volta": {
-    "node": "16.18.1",
+    "node": "18.12.1",
     "npm": "8.19.3"
   },
   "dependencies": {
