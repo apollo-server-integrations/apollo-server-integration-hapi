@@ -54,7 +54,7 @@
   },
   "peerDependencies": {
     "@apollo/server": "^4.0.0",
-    "@hapi/hapi": "^20.2.2"
+    "@hapi/hapi": "^20.2.2 || ^21.0.0"
   },
   "volta": {
     "node": "16.18.1",
