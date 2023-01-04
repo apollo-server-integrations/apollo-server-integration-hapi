@@ -26,23 +26,25 @@ it('check basic query', async () => {
 
   await hapi.start();
 
-  const response = await fetch(hapi.info.uri, {
-    method: 'POST',
-    body: JSON.stringify({ query: '{f}' }),
-    headers: {
-      'Content-Type': 'application/json'
-    }
-  });
+  try {
+    const response = await fetch(hapi.info.uri, {
+      method: 'POST',
+      body: JSON.stringify({ query: '{f}' }),
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
 
-  const statusCode = response.status;
-  const data = await response.text();
+    const statusCode = response.status;
+    const data = await response.text();
 
-  // console.log('DEBUG: status code', statusCode, data);
-  expect(statusCode).toEqual(200);
-  expect(data).toEqual('{"data":{"f":null}}\n');
-
-  await apolloServer.stop();
-  await hapi.stop();
+    // console.log('DEBUG: status code', statusCode, data);
+    expect(statusCode).toEqual(200);
+    expect(data).toEqual('{"data":{"f":null}}\n');
+  } finally {
+    await apolloServer.stop();
+    await hapi.stop();
+  }
 });
 
 it('check non-default path', async () => {
@@ -120,22 +122,25 @@ it('check with route options (payload size)', async () => {
 
   await hapi.start();
 
-  const url = hapi.info.uri + '/graphql';
-  console.log('using url', url, 'with maxBytes 5');
+  try {
+    const url = hapi.info.uri + '/graphql';
+    // console.log('using url', url, 'with maxBytes 5');
 
-  const response = await fetch(url, {
-    method: 'POST',
-    body: JSON.stringify({ query: '{f}' }),
-    headers: {
-      'Content-Type': 'application/json'
-    }
-  });
+    const response = await fetch(url, {
+      method: 'POST',
+      body: JSON.stringify({ query: '{f}' }),
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
 
-  const statusCode = response.status;
+    const statusCode = response.status;
+    // const data = await response.text();
 
-  // console.log('DEBUG: status code', statusCode, data);
-  expect(statusCode).toEqual(413);
-
-  await apolloServer.stop();
-  await hapi.stop();
+    // console.log('DEBUG: status code', statusCode, data);
+    expect(statusCode).toEqual(413);
+  } finally {
+    await apolloServer.stop();
+    await hapi.stop();
+  }
 });
