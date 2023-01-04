@@ -1,5 +1,9 @@
 # Changelog
 
+## v1.1.1
+- adjustments to support CORS properly for GET / POST routes and allow for overrides
+- test improvements
+
 ## v1.1.0
 - Add changelog
 - chore(deps): update all non-major dependencies
