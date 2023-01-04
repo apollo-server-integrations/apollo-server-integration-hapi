@@ -70,26 +70,81 @@ it('check non-default path', async () => {
 
   await hapi.start();
 
-  const url = hapi.info.uri + '/graphql';
-  console.log('using non-default url', url);
+  try {
+    const url = hapi.info.uri + '/graphql';
+    console.log('using non-default url', url);
 
-  const response = await fetch(url, {
-    method: 'POST',
-    body: JSON.stringify({ query: '{f}' }),
-    headers: {
-      'Content-Type': 'application/json'
+    const response = await fetch(url, {
+      method: 'POST',
+      body: JSON.stringify({ query: '{f}' }),
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
+
+    const statusCode = response.status;
+    const data = await response.text();
+
+    // console.log('DEBUG: status code', statusCode, data);
+    expect(statusCode).toEqual(200);
+    expect(data).toEqual('{"data":{"f":null}}\n');
+  } finally {
+    await apolloServer.stop();
+    await hapi.stop();
+  }
+});
+
+it('check default CORS', async () => {
+  const apolloServer = new ApolloServer({ typeDefs: 'type Query {f: ID}' });
+  await apolloServer.start();
+
+  const hapi = new Server({
+    debug: {
+      log: ['*'],
+      request: ['*']
+    },
+    host: 'localhost',
+    port: 5000
+  });
+
+  await hapi.register({
+    plugin: hapiPlugin,
+    options: {
+      apolloServer
     }
   });
 
-  const statusCode = response.status;
-  const data = await response.text();
+  await hapi.start();
 
-  // console.log('DEBUG: status code', statusCode, data);
-  expect(statusCode).toEqual(200);
-  expect(data).toEqual('{"data":{"f":null}}\n');
+  try {
+    const response = await fetch(hapi.info.uri, {
+      method: 'OPTIONS',
+      headers: {
+        'Content-Type': 'application/json',
+        'Origin': hapi.info.uri,
+        'Access-Control-Request-Method': 'POST',
+        'Access-Control-Request-Headers': 'Content-Type,Authorization'
+      }
+    });
 
-  await apolloServer.stop();
-  await hapi.stop();
+    const statusCode = response.status;
+    // const headers = response.headers;
+    // const body = await response.text();
+
+    // console.log('DEBUG: origin', hapi.info.uri);
+    // console.log('DEBUG: status code', statusCode);
+    // console.log('DEBUG: body', body);
+    // for (const key of headers.keys()) {
+    //   console.log('DEBUG: header keys', key, headers.get(key));
+    // }
+
+    expect(statusCode).toEqual(200);
+    // expect(headers.get()).toEqual('{"data":{"f":null}}\n');
+
+  } finally {
+    await apolloServer.stop();
+    await hapi.stop();
+  }
 });
 
 it('check with route options (payload size)', async () => {

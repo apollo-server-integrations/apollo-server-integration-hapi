@@ -122,18 +122,38 @@ const hapiPlugin = {
       throw new Error('Apollo server instance not provided in options');
     }
 
+    // GET ROUTE
+    const defaultGetOptions = {
+      cors: true
+    };
+    const getOptions = opts.getRoute?.options;
+
+    delete opts.getRoute?.options;
+
     // configure the route that apollo server will be mapped to
     server.route({
       ...opts.getRoute,
       ...{
         path: opts.path || '/',
-        method: ['GET', 'OPTIONS'],
+        method: 'GET',
         handler: hapiMiddleware(apolloServer, {
           context: opts.context,
           path: opts.path
-        } as HapiApolloPluginOptions<any>)
+        } as HapiApolloPluginOptions<any>),
+        options: {
+          ...defaultGetOptions,
+          ...getOptions
+        }
       }
     });
+
+    // POST ROUTE
+    const defaultPostOptions = {
+      cors: true
+    };
+    const postOptions = opts.postRoute?.options;
+
+    delete opts.postRoute?.options;
 
     server.route({
       ...opts.postRoute,
@@ -143,7 +163,11 @@ const hapiPlugin = {
         handler: hapiMiddleware(apolloServer, {
           context: opts.context,
           path: opts.path
-        } as HapiApolloPluginOptions<any>)
+        } as HapiApolloPluginOptions<any>),
+        options: {
+          ...defaultPostOptions,
+          ...postOptions
+        }
       }
     });
   }
