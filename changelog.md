@@ -1,5 +1,10 @@
 # Changelog
 
+## v1.1.2
+- chore(deps) update all non-major dependencies
+- chore(deps) npm audit package updates
+- adjustments to use HeaderMap instead of plain Map for headers to avoid a type error
+
 ## v1.1.1
 - adjustments to support CORS properly for GET / POST routes and allow for overrides
 - test improvements
