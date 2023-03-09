@@ -1,6 +1,7 @@
 import type {Lifecycle, ReqRef, Request, ResponseToolkit, RouteOptions, Server, Util} from '@hapi/hapi';
 import type {ApolloServer, BaseContext, ContextFunction, HTTPGraphQLRequest,} from '@apollo/server';
 import type {WithRequired} from '@apollo/utils.withrequired';
+import { HeaderMap } from "@apollo/server";
 
 export interface HapiContextFunctionArgument {
   request: Request;
@@ -95,8 +96,8 @@ function toGraphqlRequest(request: Request): HTTPGraphQLRequest {
   }
 }
 
-function normalizeHeaders(headers: Util.Dictionary<string>): Map<string, string> {
-  const newHeaders = new Map<string, string>();
+function normalizeHeaders(headers: Util.Dictionary<string>): HeaderMap {
+  const newHeaders = new HeaderMap();
   for (const [key, value] of Object.entries(headers)) {
     if (value !== undefined) {
       // headers can be an array or a single value. We join multi-valued headers with `, ` just like the Fetch API's
