@@ -65,6 +65,14 @@ await hapi.start();
 
 Note: **You must call and await `apollo.start()` before using the integration.**
 
+## **ES5 Usage**
+
+If you are using ES5 or are otherwise using require() to use this module, you may need reference the default export like so:
+
+```
+const hapiApollo = require("@as-integrations/hapi").default;
+```
+
 ## **Context**
 
 Apollo Server v4 has moved context setup outside of the `ApolloServer` constructor.
