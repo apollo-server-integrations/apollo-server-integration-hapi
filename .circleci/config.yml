@@ -79,4 +79,5 @@ workflows:
                 - "16"
                 - "18"
       - Prettier
+      - Lint
       - Spell Check
