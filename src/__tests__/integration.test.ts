@@ -1,9 +1,9 @@
-import {ApolloServer, ApolloServerOptions, BaseContext} from '@apollo/server';
+import { ApolloServer, ApolloServerOptions, BaseContext } from '@apollo/server';
 import {
   CreateServerForIntegrationTestsOptions,
   defineIntegrationTestSuite,
 } from '@apollo/server-integration-testsuite';
-import {Server} from '@hapi/hapi';
+import { Server } from '@hapi/hapi';
 import hapiPlugin from '..';
 
 defineIntegrationTestSuite(
@@ -23,7 +23,7 @@ defineIntegrationTestSuite(
     const hapi = new Server({
       debug: {
         log: ['*'],
-        request: ['*']
+        request: ['*'],
       },
       host: 'localhost',
       port: 0,
@@ -37,9 +37,9 @@ defineIntegrationTestSuite(
             // During development, log and respond with the full error.
             console.error('error:', _err ? _err.toString() : null);
             throw _err;
-          }
-        }
-      }
+          },
+        },
+      },
     });
 
     const context = testOptions?.context;
@@ -50,8 +50,8 @@ defineIntegrationTestSuite(
       plugin: hapiPlugin,
       options: {
         context,
-        apolloServer
-      }
+        apolloServer,
+      },
     });
 
     await hapi.start();
@@ -63,9 +63,9 @@ defineIntegrationTestSuite(
       url,
       async extraCleanup() {
         await hapi.stop({
-          timeout: 10000
+          timeout: 10000,
         });
-      }
+      },
     };
   },
   { noIncrementalDelivery: true },

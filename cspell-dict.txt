@@ -1,4 +1,5 @@
 apollographql
+arimus
 asynciterable
 changesets
 cimg
@@ -6,3 +7,5 @@ circleci
 codesandbox
 direnv
 opde
+testsuite
+withrequired

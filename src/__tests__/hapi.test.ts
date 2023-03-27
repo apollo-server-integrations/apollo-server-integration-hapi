@@ -11,17 +11,17 @@ it('check basic query', async () => {
   const hapi = new Server({
     debug: {
       log: ['*'],
-      request: ['*']
+      request: ['*'],
     },
     host: 'localhost',
-    port: 5000
+    port: 5000,
   });
 
   await hapi.register({
     plugin: hapiPlugin,
     options: {
-      apolloServer
-    }
+      apolloServer,
+    },
   });
 
   await hapi.start();
@@ -31,8 +31,8 @@ it('check basic query', async () => {
       method: 'POST',
       body: JSON.stringify({ query: '{f}' }),
       headers: {
-        'Content-Type': 'application/json'
-      }
+        'Content-Type': 'application/json',
+      },
     });
 
     const statusCode = response.status;
@@ -54,18 +54,18 @@ it('check non-default path', async () => {
   const hapi = new Server({
     debug: {
       log: ['*'],
-      request: ['*']
+      request: ['*'],
     },
     host: 'localhost',
-    port: 5000
+    port: 5000,
   });
 
   await hapi.register({
     plugin: hapiPlugin,
     options: {
       apolloServer,
-      path: '/graphql'
-    }
+      path: '/graphql',
+    },
   });
 
   await hapi.start();
@@ -78,8 +78,8 @@ it('check non-default path', async () => {
       method: 'POST',
       body: JSON.stringify({ query: '{f}' }),
       headers: {
-        'Content-Type': 'application/json'
-      }
+        'Content-Type': 'application/json',
+      },
     });
 
     const statusCode = response.status;
@@ -101,17 +101,17 @@ it('check default CORS', async () => {
   const hapi = new Server({
     debug: {
       log: ['*'],
-      request: ['*']
+      request: ['*'],
     },
     host: 'localhost',
-    port: 5000
+    port: 5000,
   });
 
   await hapi.register({
     plugin: hapiPlugin,
     options: {
-      apolloServer
-    }
+      apolloServer,
+    },
   });
 
   await hapi.start();
@@ -121,10 +121,10 @@ it('check default CORS', async () => {
       method: 'OPTIONS',
       headers: {
         'Content-Type': 'application/json',
-        'Origin': hapi.info.uri,
+        Origin: hapi.info.uri,
         'Access-Control-Request-Method': 'POST',
-        'Access-Control-Request-Headers': 'Content-Type,Authorization'
-      }
+        'Access-Control-Request-Headers': 'Content-Type,Authorization',
+      },
     });
 
     const statusCode = response.status;
@@ -140,7 +140,6 @@ it('check default CORS', async () => {
 
     expect(statusCode).toEqual(200);
     // expect(headers.get()).toEqual('{"data":{"f":null}}\n');
-
   } finally {
     await apolloServer.stop();
     await hapi.stop();
@@ -154,10 +153,10 @@ it('check with route options (payload size)', async () => {
   const hapi = new Server({
     debug: {
       log: ['*'],
-      request: ['*']
+      request: ['*'],
     },
     host: 'localhost',
-    port: 5000
+    port: 5000,
   });
 
   await hapi.register({
@@ -168,11 +167,11 @@ it('check with route options (payload size)', async () => {
       postRoute: {
         options: {
           payload: {
-            maxBytes: 5
-          }
-        }
-      }
-    } as HapiApolloPluginOptions<any>
+            maxBytes: 5,
+          },
+        },
+      },
+    } as HapiApolloPluginOptions<any>,
   });
 
   await hapi.start();
@@ -185,8 +184,8 @@ it('check with route options (payload size)', async () => {
       method: 'POST',
       body: JSON.stringify({ query: '{f}' }),
       headers: {
-        'Content-Type': 'application/json'
-      }
+        'Content-Type': 'application/json',
+      },
     });
 
     const statusCode = response.status;

@@ -1,7 +1,20 @@
-import type {Lifecycle, ReqRef, Request, ResponseToolkit, RouteOptions, Server, Util} from '@hapi/hapi';
-import type {ApolloServer, BaseContext, ContextFunction, HTTPGraphQLRequest,} from '@apollo/server';
-import type {WithRequired} from '@apollo/utils.withrequired';
-import { HeaderMap } from "@apollo/server";
+import type {
+  Lifecycle,
+  ReqRef,
+  Request,
+  ResponseToolkit,
+  RouteOptions,
+  Server,
+  Util,
+} from '@hapi/hapi';
+import type {
+  ApolloServer,
+  BaseContext,
+  ContextFunction,
+  HTTPGraphQLRequest,
+} from '@apollo/server';
+import type { WithRequired } from '@apollo/utils.withrequired';
+import { HeaderMap } from '@apollo/server';
 
 export interface HapiContextFunctionArgument {
   request: Request;
@@ -13,12 +26,18 @@ export interface HapiApolloPluginOptions<TContext extends BaseContext> {
   context?: ContextFunction<[HapiContextFunctionArgument], TContext>;
   path?: string;
   getRoute?: {
-    options?: RouteOptions<ReqRef> | ((server: Server) => RouteOptions<ReqRef>) | undefined;
+    options?:
+      | RouteOptions<ReqRef>
+      | ((server: Server) => RouteOptions<ReqRef>)
+      | undefined;
     rules?: ReqRef['Rules'] | undefined;
     vhost?: string | string[] | undefined;
   };
   postRoute?: {
-    options?: RouteOptions<ReqRef> | ((server: Server) => RouteOptions<ReqRef>) | undefined;
+    options?:
+      | RouteOptions<ReqRef>
+      | ((server: Server) => RouteOptions<ReqRef>)
+      | undefined;
     rules?: ReqRef['Rules'] | undefined;
     vhost?: string | string[] | undefined;
   };
@@ -41,8 +60,10 @@ function hapiMiddleware<TContext extends BaseContext>(
   // This `any` is safe because the overload above shows that context can
   // only be left out if you're using BaseContext as your context, and {} is a
   // valid BaseContext.
-  const defaultContext: ContextFunction<[HapiContextFunctionArgument],
-    any> = async () => ({});
+  const defaultContext: ContextFunction<
+    [HapiContextFunctionArgument],
+    any
+  > = async () => ({});
 
   const context: ContextFunction<[HapiContextFunctionArgument], TContext> =
     options?.context ?? defaultContext;
@@ -57,12 +78,13 @@ function hapiMiddleware<TContext extends BaseContext>(
         return h.response(err.message).code(500).takeover();
       }
 
-      const {body, headers, status} = await server.executeHTTPGraphQLRequest({
+      const { body, headers, status } = await server.executeHTTPGraphQLRequest({
         httpGraphQLRequest: toGraphqlRequest(request),
-        context: () => context({
-          request,
-          h
-        }),
+        context: () =>
+          context({
+            request,
+            h,
+          }),
       });
 
       if (body.kind === 'complete') {
@@ -84,7 +106,7 @@ function hapiMiddleware<TContext extends BaseContext>(
     }
 
     return h.continue;
-  }
+  };
 }
 
 function toGraphqlRequest(request: Request): HTTPGraphQLRequest {
@@ -93,7 +115,7 @@ function toGraphqlRequest(request: Request): HTTPGraphQLRequest {
     headers: normalizeHeaders(request.headers),
     search: request.url.search,
     body: request.payload,
-  }
+  };
 }
 
 function normalizeHeaders(headers: Util.Dictionary<string>): HeaderMap {
@@ -116,7 +138,10 @@ function normalizeHeaders(headers: Util.Dictionary<string>): HeaderMap {
 // this is the actual Hapi plugin, which utilizes the above middleware
 const hapiPlugin = {
   pkg: require('../package.json'),
-  register: async function (server: Server, opts: HapiApolloPluginOptions<any>) {
+  register: async function (
+    server: Server,
+    opts: HapiApolloPluginOptions<any>,
+  ) {
     const apolloServer: ApolloServer = opts.apolloServer;
 
     if (!apolloServer) {
@@ -125,7 +150,7 @@ const hapiPlugin = {
 
     // GET ROUTE
     const defaultGetOptions = {
-      cors: true
+      cors: true,
     };
     const getOptions = opts.getRoute?.options;
 
@@ -139,18 +164,18 @@ const hapiPlugin = {
         method: 'GET',
         handler: hapiMiddleware(apolloServer, {
           context: opts.context,
-          path: opts.path
+          path: opts.path,
         } as HapiApolloPluginOptions<any>),
         options: {
           ...defaultGetOptions,
-          ...getOptions
-        }
-      }
+          ...getOptions,
+        },
+      },
     });
 
     // POST ROUTE
     const defaultPostOptions = {
-      cors: true
+      cors: true,
     };
     const postOptions = opts.postRoute?.options;
 
@@ -163,15 +188,15 @@ const hapiPlugin = {
         method: 'POST',
         handler: hapiMiddleware(apolloServer, {
           context: opts.context,
-          path: opts.path
+          path: opts.path,
         } as HapiApolloPluginOptions<any>),
         options: {
           ...defaultPostOptions,
-          ...postOptions
-        }
-      }
+          ...postOptions,
+        },
+      },
     });
-  }
-}
+  },
+};
 
 export default hapiPlugin;

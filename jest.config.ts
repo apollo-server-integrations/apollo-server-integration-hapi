@@ -5,7 +5,7 @@ const config: Config.InitialOptions = {
   testEnvironment: 'node',
   roots: ['src'],
   transform: {
-    '/__tests__/.*.test.ts$': ['ts-jest', {  tsconfig: 'tsconfig.test.json' }]
+    '/__tests__/.*.test.ts$': ['ts-jest', { tsconfig: 'tsconfig.test.json' }],
   },
   testRegex: '/__tests__/.*.test.ts$',
   verbose: true,
