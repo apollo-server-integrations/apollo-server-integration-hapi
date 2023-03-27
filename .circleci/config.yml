@@ -1,7 +1,7 @@
 version: 2.1
 
 orbs:
-  node: circleci/node@5.1.0
+  node: circleci/node@5.0.3
 
 commands:
   install-volta:
@@ -40,6 +40,7 @@ jobs:
     steps:
       - setup-node:
           node-version: <<parameters.node-version>>
+      - run: npm run build
       - run: npm run test:ci
       - store_test_results:
           path: junit.xml
