@@ -2,7 +2,8 @@ import { ApolloServer } from '@apollo/server';
 import { Server } from '@hapi/hapi';
 import fetch from 'node-fetch';
 import { expect } from '@jest/globals';
-import hapiPlugin, { HapiApolloPluginOptions } from '../index';
+import type { HapiApolloPluginOptions } from '../index';
+import hapiPlugin from '../index';
 
 it('check basic query', async () => {
   const apolloServer = new ApolloServer({ typeDefs: 'type Query {f: ID}' });
