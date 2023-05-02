@@ -1,10 +1,7 @@
 import type { ApolloServerOptions, BaseContext } from '@apollo/server';
 import { ApolloServer } from '@apollo/server';
-import type {
-  CreateServerForIntegrationTestsOptions} from '@apollo/server-integration-testsuite';
-import {
-  defineIntegrationTestSuite,
-} from '@apollo/server-integration-testsuite';
+import type { CreateServerForIntegrationTestsOptions } from '@apollo/server-integration-testsuite';
+import { defineIntegrationTestSuite } from '@apollo/server-integration-testsuite';
 import { Server } from '@hapi/hapi';
 import hapiPlugin from '..';
 
