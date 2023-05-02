@@ -1,6 +1,5 @@
 {
   "name": "@as-integrations/hapi",
-  "private": false,
   "description": "An Apollo Server integration for use with Hapi",
   "version": "1.1.2",
   "author": {
@@ -63,8 +62,5 @@
   "volta": {
     "npm": "9.6.2",
     "node": "18.15.0"
-  },
-  "dependencies": {
-    "package-lock.json": "^1.0.0"
   }
 }
