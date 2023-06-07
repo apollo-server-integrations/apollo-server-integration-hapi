@@ -36,7 +36,7 @@ import hapiApollo from "@as-integrations/hapi";
 // ...
 
 // create the apollo server instance and start it
-const apollo = new ApolloServer<BaseContext>({
+const apolloServer = new ApolloServer<BaseContext>({
   typeDefs,
   resolvers,
 });
