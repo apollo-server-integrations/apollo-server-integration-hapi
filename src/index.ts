@@ -22,7 +22,7 @@ export interface HapiContextFunctionArgument {
 }
 
 export interface HapiApolloPluginOptions<TContext extends BaseContext> {
-  apolloServer: ApolloServer;
+  apolloServer: ApolloServer<TContext>;
   context?: ContextFunction<[HapiContextFunctionArgument], TContext>;
   path?: string;
   getRoute?: {
