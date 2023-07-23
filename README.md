@@ -123,6 +123,6 @@ await hapi.register({
 ## **Contributors**
 
 - David Castro ([arimus](https://github.com/arimus))
-- Trevor Scheer ([trevor-scheer](https://github.com/trevor-scheer)
+- Trevor Scheer ([trevor-scheer](https://github.com/trevor-scheer))
 - GeekOffice ([GeekOffice](https://github.com/geekoffice))
 
