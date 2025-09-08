@@ -43,6 +43,7 @@
     "@types/hapi__hapi": "21.0.0",
     "@types/jest": "29.5.14",
     "@types/node": "16.18.126",
+    "@types/node-fetch": "^2.6.13",
     "@typescript-eslint/eslint-plugin": "8.43.0",
     "@typescript-eslint/parser": "8.43.0",
     "cspell": "9.2.1",
