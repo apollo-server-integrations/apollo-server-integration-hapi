@@ -5,7 +5,6 @@ import type {
   ResponseToolkit,
   RouteOptions,
   Server,
-  Util,
 } from '@hapi/hapi';
 import type {
   ApolloServer,
@@ -118,7 +117,9 @@ function toGraphqlRequest(request: Request): HTTPGraphQLRequest {
   };
 }
 
-function normalizeHeaders(headers: Util.Dictionary<string>): HeaderMap {
+function normalizeHeaders(headers: {
+  [key: string]: string;
+}): HeaderMap {
   const newHeaders = new HeaderMap();
   for (const [key, value] of Object.entries(headers)) {
     if (value !== undefined) {
